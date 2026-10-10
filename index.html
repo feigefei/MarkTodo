@@ -102,9 +102,8 @@
       <!-- 【添加截止时间界面：已恢复】选择日期后，添加事项时会保存所选日期。 -->
       <input id="dueInput" type="date">
       <button id="addButton">添加</button>
-      <!-- 截止时间排序暂时停用。
-      <button id="sortButton">排序</button>
-      -->
+      <!-- 【添加排序按钮】点击按截止日期排序，再次点击切换方向。 -->
+      <button id="sortButton" title="按截止日期排序，首次从早到晚，再次点击切换方向">排序</button>
       <button id="completeAllButton">全部完成</button>
       <button id="clearCompletedButton">清空已完成</button>
       <button id="exportButton">导出</button>
@@ -118,8 +117,7 @@
     const todoInput = document.getElementById("todoInput");
     const addButton = document.getElementById("addButton");
     const todoList = document.getElementById("todoList");
-    // 截止时间排序暂时停用。
-    // const sortButton = document.getElementById("sortButton");
+    const sortButton = document.getElementById("sortButton");
     const stats = document.getElementById("stats");
 
     // 【添加截止时间界面：已恢复】获取日期输入框，添加事项时读取所选日期。
@@ -230,11 +228,17 @@
       stats.textContent = `共 ${todos.length} 项，还剩 ${left} 项没完成`;
     }
 
-    /* 截止时间排序暂时停用。
+    // 【支持反向排序】记录下一次排序方向，首次点击按截止日期升序排列。
     let sortAsc = true;
 
+    // 【实现按截止时间排序】日期格式为 YYYY-MM-DD，可直接比较先后。
     function sortByDue() {
       todos.sort((a, b) => {
+        // 未设置截止日期的事项始终放在末尾，并保持彼此的相对顺序。
+        if (!a.due && !b.due) {
+          return 0;
+        }
+
         if (!a.due) {
           return 1;
         }
@@ -243,15 +247,21 @@
           return -1;
         }
 
-        return (a.due < b.due) === sortAsc ? -1 : 1;
+        // 相同截止日期的事项保持原有相对顺序。
+        if (a.due === b.due) {
+          return 0;
+        }
+
+        const order = a.due < b.due ? -1 : 1;
+        return sortAsc ? order : -order;
       });
 
+      // 【支持反向排序】显示本次排序方向，下次点击切换到相反方向。
       sortButton.textContent = sortAsc ? "排序 ↑" : "排序 ↓";
       sortAsc = !sortAsc;
 
       renderTodos();
     }
-    */
 
     function addTodo() {
       const text = todoInput.value.trim();
@@ -274,8 +284,7 @@
     }
 
     addButton.addEventListener("click", addTodo);
-    // 截止时间排序暂时停用，不绑定排序事件。
-    // sortButton.addEventListener("click", sortByDue);
+    sortButton.addEventListener("click", sortByDue);
 
     completeAllButton.addEventListener("click", completeAll);
     clearCompletedButton.addEventListener("click", clearCompleted);
