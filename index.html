@@ -69,24 +69,31 @@
       color: #999;
     }
 
+    /* 【截止日期列表显示：暂时停用】已完成事项的日期文字样式。
     li.completed .due {
       text-decoration: none;
     }
+    */
 
+    /* 【添加截止时间界面：已恢复】截止日期输入框的样式。 */
     input[type="date"] {
       padding: 10px 12px;
       font-size: 16px;
     }
 
+    /* 【截止日期列表显示：暂时停用】列表中的日期文字样式。
     li .due {
       flex: none;
       font-size: 14px;
       color: #888;
     }
+    */
 
+    /* 【增加过期提醒：暂时停用】过期日期的红色提示样式。
     li .due.overdue {
       color: #d92c2c;
     }
+    */
   </style>
 </head>
 <body>
@@ -95,9 +102,12 @@
 
     <div class="input-row">
       <input id="todoInput" type="text" placeholder="输入一个待办事项">
+      <!-- 【添加截止时间界面：已恢复】可选择日期，保存逻辑暂未启用。 -->
       <input id="dueInput" type="date">
       <button id="addButton">添加</button>
+      <!-- 截止时间排序依赖日期保存，暂时停用。
       <button id="sortButton">排序</button>
+      -->
       <button id="completeAllButton">全部完成</button>
       <button id="clearCompletedButton">清空已完成</button>
       <button id="exportButton">导出</button>
@@ -111,9 +121,11 @@
     const todoInput = document.getElementById("todoInput");
     const addButton = document.getElementById("addButton");
     const todoList = document.getElementById("todoList");
-    const sortButton = document.getElementById("sortButton");
+    // 截止时间排序暂时停用。
+    // const sortButton = document.getElementById("sortButton");
     const stats = document.getElementById("stats");
 
+    // 【添加截止时间界面：已恢复】获取日期输入框，供后续启用保存逻辑时使用。
     const dueInput = document.getElementById("dueInput");
     const completeAllButton = document.getElementById("completeAllButton");
     const clearCompletedButton = document.getElementById("clearCompletedButton");
@@ -124,6 +136,7 @@
       { text: "给这期 Git 教程点赞", completed: true }
     ];
 
+    /* 【增加过期提醒：暂时停用】判断未完成的事项是否已超过截止日期。
     function isOverdue(todo) {
       if (!todo.due || todo.completed) {
         return false;
@@ -132,6 +145,7 @@
       const today = new Date().toISOString().slice(0, 10);
       return todo.due < today;
     }
+    */
 
     function clearCompleted() {
       const remaining = todos.filter(todo => !todo.completed);
@@ -183,13 +197,17 @@
         const text = document.createElement("span");
         text.textContent = todo.text;
 
+        /* 【截止日期列表显示：暂时停用】创建并显示已保存的截止日期。
         const due = document.createElement("span");
         due.className = "due";
         due.textContent = todo.due ? todo.due : "";
+        */
+        /* 【增加过期提醒：暂时停用】显示过期样式和“已过期”提示。
         if (isOverdue(todo)) {
           due.classList.add("overdue");
           due.textContent = todo.due + " 已过期";
         }
+        */
 
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "删除";
@@ -201,7 +219,8 @@
 
         li.appendChild(checkbox);
         li.appendChild(text);
-        li.appendChild(due);
+        // 【截止日期列表显示：暂时停用】不再将日期文字加入列表。
+        // li.appendChild(due);
         li.appendChild(deleteButton);
 
         todoList.appendChild(li);
@@ -211,6 +230,7 @@
       stats.textContent = `共 ${todos.length} 项，还剩 ${left} 项没完成`;
     }
 
+    /* 截止时间排序依赖日期保存，暂时停用。
     let sortAsc = true;
 
     function sortByDue() {
@@ -231,6 +251,7 @@
 
       renderTodos();
     }
+    */
 
     function addTodo() {
       const text = todoInput.value.trim();
@@ -242,16 +263,19 @@
       todos.push({
         text,
         completed: false,
-        due: dueInput.value
+        // 【截止时间保存逻辑：暂时停用】将所选日期存入待办对象的 due 字段（仅内存）。
+        // due: dueInput.value
       });
 
-      dueInput.value = "";
+      // 【截止时间保存逻辑：暂时停用】添加后清空日期输入框。
+      // dueInput.value = "";
       todoInput.value = "";
       renderTodos();
     }
 
     addButton.addEventListener("click", addTodo);
-    sortButton.addEventListener("click", sortByDue);
+    // 截止时间排序暂时停用，不绑定排序事件。
+    // sortButton.addEventListener("click", sortByDue);
 
     completeAllButton.addEventListener("click", completeAll);
     clearCompletedButton.addEventListener("click", clearCompleted);
