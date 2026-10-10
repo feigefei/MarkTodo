@@ -102,10 +102,10 @@
 
     <div class="input-row">
       <input id="todoInput" type="text" placeholder="输入一个待办事项">
-      <!-- 【添加截止时间界面：已恢复】可选择日期，保存逻辑暂未启用。 -->
+      <!-- 【添加截止时间界面：已恢复】选择日期后，添加事项时会保存所选日期。 -->
       <input id="dueInput" type="date">
       <button id="addButton">添加</button>
-      <!-- 截止时间排序依赖日期保存，暂时停用。
+      <!-- 截止时间排序暂时停用。
       <button id="sortButton">排序</button>
       -->
       <button id="completeAllButton">全部完成</button>
@@ -125,7 +125,7 @@
     // const sortButton = document.getElementById("sortButton");
     const stats = document.getElementById("stats");
 
-    // 【添加截止时间界面：已恢复】获取日期输入框，供后续启用保存逻辑时使用。
+    // 【添加截止时间界面：已恢复】获取日期输入框，添加事项时读取所选日期。
     const dueInput = document.getElementById("dueInput");
     const completeAllButton = document.getElementById("completeAllButton");
     const clearCompletedButton = document.getElementById("clearCompletedButton");
@@ -230,7 +230,7 @@
       stats.textContent = `共 ${todos.length} 项，还剩 ${left} 项没完成`;
     }
 
-    /* 截止时间排序依赖日期保存，暂时停用。
+    /* 截止时间排序暂时停用。
     let sortAsc = true;
 
     function sortByDue() {
@@ -263,12 +263,12 @@
       todos.push({
         text,
         completed: false,
-        // 【截止时间保存逻辑：暂时停用】将所选日期存入待办对象的 due 字段（仅内存）。
-        // due: dueInput.value
+        // 【截止时间保存逻辑：已恢复】将所选日期存入待办对象的 due 字段（仅内存）。
+        due: dueInput.value
       });
 
-      // 【截止时间保存逻辑：暂时停用】添加后清空日期输入框。
-      // dueInput.value = "";
+      // 【截止时间保存逻辑：已恢复】添加后清空日期输入框。
+      dueInput.value = "";
       todoInput.value = "";
       renderTodos();
     }
